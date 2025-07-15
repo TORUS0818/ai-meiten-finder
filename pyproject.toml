@@ -1,0 +1,23 @@
+[project]
+name = "ai-meiten-finder"
+version = "0.1.0"
+description = "レビューのAI感情分析による飲食店評価システム"
+authors = [{ name = "Your Name", email = "your@email.com" }]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+
+dependencies = [
+  "requests",
+  "beautifulsoup4",
+  "transformers",
+  "torch"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-mock",
+  "black",
+  "ruff"
+]
