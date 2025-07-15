@@ -6,6 +6,25 @@ AIによる感情分析を使った、公平な飲食店スコアリングシス
 
 このプロジェクトは、食べログなどのレビューサイトから口コミを収集し、AIによる感情分析でスコアリングすることで、広告やバイアスに左右されない、真の店舗評価を提供することを目指します。
 
+## ディレクトリ構成 (Directory Structure)
+
+```
+ai-meiten-finder/
+├── src/
+│   └── ai_meiten_finder/
+│       ├── __init__.py     # パッケージの初期化ファイル
+│       ├── cli.py          # CLIのエントリーポイント
+│       ├── scraper.py      # スクレイピング処理
+│       └── analyzer.py     # 感情分析処理
+│
+├── tests/                  # テストコード
+├── notebooks/              # 実験用のJupyter Notebook
+├── .venv/                  # 仮想環境 (Git管理外)
+├── .gitignore              # Gitの無視ファイル
+├── pyproject.toml          # プロジェクト設定
+└── README.md               # このファイル
+```
+
 ## 開発環境のセットアップ (Setup)
 
 開発を始めるには、以下の手順で環境を構築してください。
