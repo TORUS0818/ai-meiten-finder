@@ -65,9 +65,10 @@ ai-meiten-finder/
 
 私たちは、以下の流れで開発を進めます。
 
-1.  **Issueを作成する**
-    -   まず、[GitHub Issues](https://github.com/[YOUR_GITHUB_USERNAME]/ai-meiten-finder/issues) で、これから行う作業のチケット（Issue）を作成します。
-    -   バグ報告、機能追加の提案など、すべての作業はIssueから始めます。
+1.  **タスクの管理 (Task Management)**
+    -   **Issueの作成:** まず、[GitHub Issues](https://github.com/[YOUR_GITHUB_USERNAME]/ai-meiten-finder/issues) で作業チケット（Issue）を作成します。すべての作業はIssueから始めます。
+    -   **期限の設定:** 作成したIssueは、関連する**マイルストーン**に紐付け、期限を明確にします。
+    -   **進捗の可視化:** Issueは[GitHub Projects](https://github.com/[YOUR_GITHUB_USERNAME]/ai-meiten-finder/projects)のボード上で管理します。作業を開始する際に「Todo」から「In Progress」へ移動させるなど、常に最新の状態を保ちます。
 
 2.  **ブランチを作成する**
     -   作業を始める前に、`main`ブランチから、作業内容に合わせた名前のブランチを作成します。
