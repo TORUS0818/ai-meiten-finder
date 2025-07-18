@@ -13,6 +13,10 @@ dependencies = [
   "transformers",
   "torch",
   "ruff>=0.12.3",
+  "pytest>=8.4.1",
+  "fugashi>=1.5.1",
+  "protobuf>=6.31.1",
+  "unidic-lite>=1.0.8",
 ]
 
 [project.optional-dependencies]
