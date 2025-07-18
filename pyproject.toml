@@ -11,7 +11,9 @@ dependencies = [
   "requests",
   "beautifulsoup4",
   "transformers",
-  "torch"
+  "torch",
+  "pre-commit>=4.2.0",
+  "pytest>=8.4.1",
 ]
 
 [project.optional-dependencies]
