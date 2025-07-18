@@ -29,11 +29,9 @@ def calculate_review_score(reviews: list[str]) -> float | None:
     scores = []
     for review in reviews:
         result = sentiment_pipeline(review)  # type: ignore
-        if result[0]['label'] == 'POSITIVE':
+        if result[0]['label'] == 'positive':
             scores.append(result[0]['score'])
-        elif result[0]['label'] == 'NEGATIVE':
-            scores.append(-result[0]['score'])
-        else:
-            scores.append(0.0)  # NEUTRALの場合
+        elif result[0]['label'] == 'negative':
+            scores.append(-result[0]['score'])  # NEUTRALの場合
 
     return sum(scores) / len(scores)

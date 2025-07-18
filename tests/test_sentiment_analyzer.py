@@ -29,8 +29,8 @@ def test_calculate_review_score_positive_reviews(monkeypatch):
 
     # モックされたpipelineの戻り値を設定
     mock_sentiment_pipeline.side_effect = [
-        [{'label': 'POSITIVE', 'score': 0.9}],
-        [{'label': 'POSITIVE', 'score': 0.8}],
+        [{'label': 'positive', 'score': 0.9}],
+        [{'label': 'positive', 'score': 0.8}],
     ]
 
     reviews = ['とても良い商品でした。', '素晴らしいサービスです。']
@@ -50,8 +50,8 @@ def test_calculate_review_score_negative_reviews(monkeypatch):
     )
 
     mock_sentiment_pipeline.side_effect = [
-        [{'label': 'NEGATIVE', 'score': 0.7}],
-        [{'label': 'NEGATIVE', 'score': 0.6}],
+        [{'label': 'negative', 'score': 0.7}],
+        [{'label': 'negative', 'score': 0.6}],
     ]
     reviews = ['最悪でした。', 'がっかりです。']
     expected_score = (-0.7 + -0.6) / 2
@@ -59,29 +59,10 @@ def test_calculate_review_score_negative_reviews(monkeypatch):
     assert mock_sentiment_pipeline.call_count == len(reviews)
 
 
-def test_calculate_review_score_neutral_reviews(monkeypatch):
-    """
-    中立なレビューのスコアが正しく計算されることをテスト
-    """
-    mock_sentiment_pipeline = MagicMock()
-    monkeypatch.setattr(
-        'src.ai_meiten_finder.sentiment_analyzer.sentiment_pipeline',
-        mock_sentiment_pipeline,
-    )
-
-    mock_sentiment_pipeline.side_effect = [
-        [{'label': 'NEUTRAL', 'score': 0.5}],
-        [{'label': 'NEUTRAL', 'score': 0.4}],
-    ]
-    reviews = ['特に問題ありません。', '普通でした。']
-    expected_score = (0.0 + 0.0) / 2  # NEUTRALは0として扱われる
-    assert calculate_review_score(reviews) == pytest.approx(expected_score)
-    assert mock_sentiment_pipeline.call_count == len(reviews)
-
-
 def test_calculate_review_score_mixed_reviews(monkeypatch):
     """
-    ポジティブ、ネガティブ、中立が混ざったレビューのスコアが正しく計算されることをテスト
+    ポジティブ、ネガティブが混ざったレビューのスコアが正しく計算されることをテスト
+    (2値分類モデルの特性を考慮)
     """
     mock_sentiment_pipeline = MagicMock()
     monkeypatch.setattr(
@@ -89,12 +70,17 @@ def test_calculate_review_score_mixed_reviews(monkeypatch):
         mock_sentiment_pipeline,
     )
 
+    # 2値分類モデルなので、中立的なレビューもpositiveかnegativeに分類されると仮定
     mock_sentiment_pipeline.side_effect = [
-        [{'label': 'POSITIVE', 'score': 0.9}],
-        [{'label': 'NEGATIVE', 'score': 0.7}],
-        [{'label': 'NEUTRAL', 'score': 0.5}],
+        [{'label': 'positive', 'score': 0.9}],
+        [{'label': 'negative', 'score': 0.7}],
+        [
+            {'label': 'positive', 'score': 0.5}
+        ],  # 「普通」のレビューがpositiveに分類されたと仮定
     ]
     reviews = ['良いです。', '悪い。', '普通。']
-    expected_score = (0.9 + (-0.7) + 0.0) / 3
+    expected_score = (
+        0.9 + (-0.7) + 0.5
+    ) / 3  # 0.5は「普通」のレビューがpositiveとされたスコア
     assert calculate_review_score(reviews) == pytest.approx(expected_score)
     assert mock_sentiment_pipeline.call_count == len(reviews)
