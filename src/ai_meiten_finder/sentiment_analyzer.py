@@ -32,6 +32,6 @@ def calculate_review_score(reviews: list[str]) -> float | None:
         if result[0]['label'] == 'positive':
             scores.append(result[0]['score'])
         elif result[0]['label'] == 'negative':
-            scores.append(-result[0]['score'])  # NEUTRALの場合
+            scores.append(-result[0]['score'])
 
     return sum(scores) / len(scores)
