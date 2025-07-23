@@ -12,19 +12,18 @@ dependencies = [
   "beautifulsoup4",
   "transformers",
   "torch",
-  "ruff>=0.12.3",
   "pytest>=8.4.1",
   "fugashi>=1.5.1",
   "protobuf>=6.31.1",
   "unidic-lite>=1.0.8",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-  "pytest",
-  "pytest-mock",
-  "black",
-  "ruff"
+    "pre-commit>=4.2.0",
+    "pytest-mock>=3.14.1",
+    "pytest>=8.4.1",
+    "ruff>=0.12.4",
 ]
 
 [tool.ruff]
