@@ -12,6 +12,9 @@ dependencies = [
   "beautifulsoup4",
   "transformers",
   "torch",
+  "fugashi>=1.5.1",
+  "protobuf>=6.31.1",
+  "unidic-lite>=1.0.8",
 ]
 
 [dependency-groups]
