@@ -12,7 +12,6 @@ dependencies = [
   "beautifulsoup4",
   "transformers",
   "torch",
-  "pytest>=8.4.1",
   "fugashi>=1.5.1",
   "protobuf>=6.31.1",
   "unidic-lite>=1.0.8",
@@ -25,9 +24,3 @@ dev = [
     "pytest>=8.4.1",
     "ruff>=0.12.4",
 ]
-
-[tool.ruff]
-line-length = 88
-
-[tool.ruff.format]
-quote-style = "single"
