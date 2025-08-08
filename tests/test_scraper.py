@@ -1,23 +1,13 @@
-import pytest
-import src.ai_meiten_finder.scraper as scraper
+import src.ai_meiten_finder.scraper as sm
 
 
-@pytest.fixture
-def mock_html_content():
-    return """
-    <html>
-        <body>
-            <div class="rvw-item__rvw-comment">美味しすぎる</div>
-            <div class="rvw-item__rvw-comment">まずい</div>
-            <div class="rvw-item__rvw-comment">サービスがいまいち</div>
-        </body>
-    </html>
-    """
-
-
-def test_find_reviews(mock_html_content):
-    reviews = scraper.find_reviews(mock_html_content)
-    assert len(reviews) == 3
-    assert reviews[0] == "美味しすぎる"
-    assert reviews[1] == "まずい"
-    assert reviews[2] == "サービスがいまいち"
+def test_extract_helper():
+    place = sm.Place.model_validate(
+        {
+            "displayName": {"text": "Foo"},
+            "reviews": [{"text": {"text": "bar"}}],
+        }
+    )
+    review = sm._extract_restaurant_name_and_reviews_from(place)
+    assert review.display_name == "Foo"
+    assert review.review_sentences == ["bar"]
