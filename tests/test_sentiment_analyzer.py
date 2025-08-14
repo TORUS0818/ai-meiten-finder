@@ -5,13 +5,13 @@ from src.ai_meiten_finder.sentiment_analyzer import calculate_review_score
 # テストケースを定義
 test_cases = [
     (
-        "positive_reviews",  # test_id
-        ["とても良い商品でした。", "素晴らしいサービスです。"],  # reviews
+        "positive_reviews",
+        ["とても良い商品でした。", "素晴らしいサービスです。"],
         [
             [{"label": "positive", "score": 0.9}],
             [{"label": "positive", "score": 0.8}],
-        ],  # mock_return
-        (0.9 + 0.8) / 2,  # expected_score
+        ],
+        (0.9 + 0.8) / 2,
     ),
     (
         "negative_reviews",
@@ -47,7 +47,7 @@ test_cases = [
 @pytest.mark.parametrize(
     "test_id, reviews, mock_return, expected_score",
     test_cases,
-    ids=[case[0] for case in test_cases],  # test_idをテスト名として使用
+    ids=[case[0] for case in test_cases],
 )
 def test_calculate_review_score(
     test_id, reviews, mock_return, expected_score, monkeypatch
