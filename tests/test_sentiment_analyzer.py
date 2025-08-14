@@ -1,5 +1,4 @@
 import pytest
-from unittest.mock import MagicMock
 from src.ai_meiten_finder.sentiment_analyzer import calculate_review_score
 
 # テストケースを定義
@@ -49,16 +48,12 @@ test_cases = [
     test_cases,
     ids=[case[0] for case in test_cases],
 )
-def test_calculate_review_score(
-    test_id, reviews, mock_return, expected_score, monkeypatch
-):
+def test_calculate_review_score(test_id, reviews, mock_return, expected_score, mocker):
     """
     様々なレビューリストに対するスコア計算をテスト
     """
-    mock_sentiment_pipeline = MagicMock()
-    monkeypatch.setattr(
-        "src.ai_meiten_finder.sentiment_analyzer.sentiment_pipeline",
-        mock_sentiment_pipeline,
+    mock_sentiment_pipeline = mocker.patch(
+        "src.ai_meiten_finder.sentiment_analyzer.sentiment_pipeline"
     )
 
     if not reviews:
