@@ -1,15 +1,15 @@
 from transformers.pipelines import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-model_name = 'llm-book/bert-base-japanese-v3-marc_ja'
+model_name = "llm-book/bert-base-japanese-v3-marc_ja"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
 sentiment_pipeline = pipeline(
-    'sentiment-analysis',
+    "sentiment-analysis",
     model=model,
     tokenizer=tokenizer,
-)  # type: ignore
+)
 
 
 def calculate_review_score(reviews: list[str]) -> float | None:
@@ -28,10 +28,10 @@ def calculate_review_score(reviews: list[str]) -> float | None:
 
     scores = []
     for review in reviews:
-        result = sentiment_pipeline(review)  # type: ignore
-        if result[0]['label'] == 'positive':
-            scores.append(result[0]['score'])
-        elif result[0]['label'] == 'negative':
-            scores.append(-result[0]['score'])
+        result = sentiment_pipeline(review)
+        if result[0]["label"] == "positive":
+            scores.append(result[0]["score"])
+        elif result[0]["label"] == "negative":
+            scores.append(-result[0]["score"])
 
     return sum(scores) / len(scores)
