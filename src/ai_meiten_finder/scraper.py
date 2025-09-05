@@ -4,6 +4,23 @@ import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 import structlog
+import logging
+
+logging.basicConfig(
+    filename="app.log",
+    level=logging.INFO,
+    format="%(message)s",
+)
+
+structlog.configure(
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    wrapper_class=structlog.stdlib.BoundLogger,
+    processors=[
+        structlog.processors.add_log_level,
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+    ],
+)
 
 logger = structlog.get_logger(__name__)
 
