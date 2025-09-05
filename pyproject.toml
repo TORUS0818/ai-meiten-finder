@@ -18,6 +18,8 @@ dependencies = [
   "fugashi>=1.5.1",
   "protobuf>=6.31.1",
   "unidic-lite>=1.0.8",
+  "structlog>=25.4.0",
+  "fastapi-cli>=0.0.10",
 ]
 
 [dependency-groups]
