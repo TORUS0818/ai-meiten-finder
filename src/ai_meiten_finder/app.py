@@ -3,28 +3,10 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from ai_meiten_finder.scraper import search_restaurant_reviews
 from ai_meiten_finder.sentiment_analyzer import calculate_review_score
+from .logger import setup_logging, get_logger
 
-import logging
-import structlog
-
-logging.basicConfig(
-    filename="app.log",
-    level=logging.INFO,
-    format="%(message)s",
-)
-
-structlog.configure(
-    processors=[
-        structlog.processors.add_log_level,
-        structlog.processors.TimeStamper(fmt="iso"),
-        structlog.processors.format_exc_info,
-        structlog.processors.JSONRenderer(),
-    ],
-    wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
-    logger_factory=structlog.stdlib.LoggerFactory(),
-    cache_logger_on_first_use=True,
-)
-logger = structlog.get_logger(__name__)
+setup_logging()
+logger = get_logger(__name__)
 
 load_dotenv()
 
