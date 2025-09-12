@@ -3,26 +3,7 @@ import argparse
 import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
-import structlog
-import logging
 
-logging.basicConfig(
-    filename="app.log",
-    level=logging.INFO,
-    format="%(message)s",
-)
-
-structlog.configure(
-    logger_factory=structlog.stdlib.LoggerFactory(),
-    wrapper_class=structlog.stdlib.BoundLogger,
-    processors=[
-        structlog.processors.add_log_level,
-        structlog.processors.TimeStamper(fmt="iso"),
-        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
-    ],
-)
-
-logger = structlog.get_logger(__name__)
 
 load_dotenv()
 GOOGLE_PLACES_API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
@@ -68,7 +49,6 @@ def search_restaurant_reviews(
 ) -> RestaurantReviews | None:
     """テキスト検索で最上位候補 reviewのうち5件と、その要約を返す"""
     if not text_query:
-        logger.error("empty_text_query")
         raise ValueError("text_query must be non-empty")
 
     headers = {
@@ -90,43 +70,11 @@ def search_restaurant_reviews(
         "regionCode": region_code,
         "pageSize": page_size,
     }
+    r = requests.post(SEARCH_URL, headers=headers, json=body, timeout=30)
+    r.raise_for_status()
+    parsed_response = SearchResponse.model_validate(r.json())
+    return _extract_restaurant_name_and_reviews_from(parsed_response.places[0])
 
-    try:
-        r = requests.post(SEARCH_URL, headers=headers, json=body, timeout=30)
-        r.raise_for_status()
-        parsed_response = SearchResponse.model_validate(r.json())
-        if not parsed_response.places:
-            logger.info(
-                "search_restaurant_reviews_not_found",
-                text_query=text_query,
-                page_size=page_size,
-                status_code=r.status_code,
-            )
-            return None
-
-        place = parsed_response.places[0]
-        result = _extract_restaurant_name_and_reviews_from(place)
-        logger.info(
-            "search_restaurant_reviews_success",
-            text_query=text_query,
-            page_size=page_size,
-            status_code=r.status_code,
-            place_id=place.id,
-            place_name=place.display_name.text,
-            review_count=len(place.reviews),
-        )
-        return result
-
-    except requests.HTTPError as e:
-        logger.error(
-            "search_restaurant_reviews_http_error",
-            text_query=text_query,
-            page_size=page_size,
-            status_code=e.response.status_code,
-            response_text=e.response.text,
-            exc_info=True,
-        )
-        raise
 
 
 def _extract_restaurant_name_and_reviews_from(place: Place) -> RestaurantReviews:
