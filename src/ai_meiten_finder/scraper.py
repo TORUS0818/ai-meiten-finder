@@ -76,7 +76,6 @@ def search_restaurant_reviews(
     return _extract_restaurant_name_and_reviews_from(parsed_response.places[0])
 
 
-
 def _extract_restaurant_name_and_reviews_from(place: Place) -> RestaurantReviews:
     """place から、レビューの関連性の高いもの最大5件(Google APIの仕様)を抽出する"""
     display_name = place.display_name.text
