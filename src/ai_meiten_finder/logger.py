@@ -3,12 +3,13 @@
 """
 
 import logging
-import structlog
 from pathlib import Path
+
+import structlog
 
 
 def setup_logging(
-    log_file: str = "log/app.log",
+    log_file: str = 'log/app.log',
     log_level: int = logging.INFO,
 ) -> None:
     """
@@ -26,7 +27,7 @@ def setup_logging(
     logging.basicConfig(
         filename=log_file,
         level=log_level,
-        format="%(message)s",
+        format='%(message)s',
         force=True,  # 既存の設定を上書き
     )
 
@@ -36,7 +37,7 @@ def setup_logging(
         wrapper_class=structlog.stdlib.BoundLogger,
         processors=[
             structlog.processors.add_log_level,
-            structlog.processors.TimeStamper(fmt="iso"),
+            structlog.processors.TimeStamper(fmt='iso'),
             structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
         ],
         cache_logger_on_first_use=True,

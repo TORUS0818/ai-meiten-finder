@@ -1,16 +1,16 @@
-import os
 import argparse
+import os
+
 import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
-
 load_dotenv()
-GOOGLE_PLACES_API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
+GOOGLE_PLACES_API_KEY = os.getenv('GOOGLE_PLACES_API_KEY')
 if not GOOGLE_PLACES_API_KEY:
-    raise RuntimeError("GOOGLE_PLACES_API_KEY is not set")
+    raise RuntimeError('GOOGLE_PLACES_API_KEY is not set')
 
-SEARCH_URL = "https://places.googleapis.com/v1/places:searchText"
+SEARCH_URL = 'https://places.googleapis.com/v1/places:searchText'
 
 
 class ReviewText(BaseModel):
@@ -27,7 +27,7 @@ class DisplayName(BaseModel):
 
 class Place(BaseModel):
     id: str | None = None
-    display_name: DisplayName = Field(alias="displayName")
+    display_name: DisplayName = Field(alias='displayName')
     reviews: list[Review] = []
 
 
@@ -43,32 +43,32 @@ class RestaurantReviews(BaseModel):
 def search_restaurant_reviews(
     text_query: str,
     *,
-    language_code: str = "ja",
-    region_code: str = "JP",
+    language_code: str = 'ja',
+    region_code: str = 'JP',
     page_size: int = 1,
 ) -> RestaurantReviews | None:
     """テキスト検索で最上位候補 reviewのうち5件と、その要約を返す"""
     if not text_query:
-        raise ValueError("text_query must be non-empty")
+        raise ValueError('text_query must be non-empty')
 
     headers = {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": GOOGLE_PLACES_API_KEY,
-        "X-Goog-FieldMask": ",".join(
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': GOOGLE_PLACES_API_KEY,
+        'X-Goog-FieldMask': ','.join(
             [
-                "places.id",
-                "places.displayName",
-                "places.reviews.text.text",
-                "places.reviewSummary",
+                'places.id',
+                'places.displayName',
+                'places.reviews.text.text',
+                'places.reviewSummary',
             ]
         ),
     }
     body = {
-        "textQuery": text_query,
-        "includedType": "restaurant",
-        "languageCode": language_code,
-        "regionCode": region_code,
-        "pageSize": page_size,
+        'textQuery': text_query,
+        'includedType': 'restaurant',
+        'languageCode': language_code,
+        'regionCode': region_code,
+        'pageSize': page_size,
     }
     r = requests.post(SEARCH_URL, headers=headers, json=body, timeout=30)
     r.raise_for_status()
@@ -89,9 +89,9 @@ def _extract_restaurant_name_and_reviews_from(place: Place) -> RestaurantReviews
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Places API(New) で口コミを取�?")
+    parser = argparse.ArgumentParser(description='Places API(New) で口コミを取�?')
     parser.add_argument(
-        "--query",
+        '--query',
         help="店名などのテキスト（店名: 'スターバックス 渋谷駅前",
         required=True,
     )
@@ -102,5 +102,5 @@ def main():
     return reviews
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

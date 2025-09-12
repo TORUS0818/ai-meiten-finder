@@ -30,8 +30,8 @@ dev = [
     "ruff>=0.12.4",
 ]
 
-[tool.ruff]
-line-length = 88
+[tool.ruff.lint]
+select = ["I", "FAST"]
 
 [tool.ruff.format]
 quote-style = "single"
