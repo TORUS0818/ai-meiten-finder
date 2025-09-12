@@ -1,50 +1,51 @@
 import pytest
+
 from src.ai_meiten_finder.sentiment_analyzer import calculate_review_score
 
 # テストケースを定義
 test_cases = [
     (
-        "positive_reviews",
-        ["とても良い商品でした。", "素晴らしいサービスです。"],
+        'positive_reviews',
+        ['とても良い商品でした。', '素晴らしいサービスです。'],
         [
-            [{"label": "positive", "score": 0.9}],
-            [{"label": "positive", "score": 0.8}],
+            [{'label': 'positive', 'score': 0.9}],
+            [{'label': 'positive', 'score': 0.8}],
         ],
         (0.9 + 0.8) / 2,
     ),
     (
-        "negative_reviews",
-        ["最悪でした。", "がっかりです。"],
-        [[{"label": "negative", "score": 0.7}], [{"label": "negative", "score": 0.6}]],
+        'negative_reviews',
+        ['最悪でした。', 'がっかりです。'],
+        [[{'label': 'negative', 'score': 0.7}], [{'label': 'negative', 'score': 0.6}]],
         (-0.7 - 0.6) / 2,
     ),
     (
-        "mixed_reviews",
-        ["良いです。", "悪い。", "普通。"],
+        'mixed_reviews',
+        ['良いです。', '悪い。', '普通。'],
         [
-            [{"label": "positive", "score": 0.9}],
-            [{"label": "negative", "score": 0.7}],
-            [{"label": "positive", "score": 0.5}],
+            [{'label': 'positive', 'score': 0.9}],
+            [{'label': 'negative', 'score': 0.7}],
+            [{'label': 'positive', 'score': 0.5}],
         ],
         (0.9 - 0.7 + 0.5) / 3,
     ),
     (
-        "empty_list",
+        'empty_list',
         [],
         [],
         None,
     ),
     (
-        "neutral_average",
-        ["良い", "悪い"],
-        [[{"label": "positive", "score": 0.8}], [{"label": "negative", "score": 0.8}]],
+        'neutral_average',
+        ['良い', '悪い'],
+        [[{'label': 'positive', 'score': 0.8}], [{'label': 'negative', 'score': 0.8}]],
         0.0,
     ),
 ]
 
 
 @pytest.mark.parametrize(
-    "test_id, reviews, mock_return, expected_score",
+    'test_id, reviews, mock_return, expected_score',
     test_cases,
     ids=[case[0] for case in test_cases],
 )
@@ -53,7 +54,7 @@ def test_calculate_review_score(test_id, reviews, mock_return, expected_score, m
     様々なレビューリストに対するスコア計算をテスト
     """
     mock_sentiment_pipeline = mocker.patch(
-        "src.ai_meiten_finder.sentiment_analyzer.sentiment_pipeline"
+        'src.ai_meiten_finder.sentiment_analyzer.sentiment_pipeline'
     )
 
     if not reviews:
