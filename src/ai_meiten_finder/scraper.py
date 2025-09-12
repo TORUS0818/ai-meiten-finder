@@ -4,6 +4,7 @@ import requests
 from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 
+
 load_dotenv()
 GOOGLE_PLACES_API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
 if not GOOGLE_PLACES_API_KEY:
@@ -49,6 +50,7 @@ def search_restaurant_reviews(
     """テキスト検索で最上位候補 reviewのうち5件と、その要約を返す"""
     if not text_query:
         raise ValueError("text_query must be non-empty")
+
     headers = {
         "Content-Type": "application/json",
         "X-Goog-Api-Key": GOOGLE_PLACES_API_KEY,
@@ -72,6 +74,7 @@ def search_restaurant_reviews(
     r.raise_for_status()
     parsed_response = SearchResponse.model_validate(r.json())
     return _extract_restaurant_name_and_reviews_from(parsed_response.places[0])
+
 
 
 def _extract_restaurant_name_and_reviews_from(place: Place) -> RestaurantReviews:
